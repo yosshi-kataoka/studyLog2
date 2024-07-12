@@ -42,7 +42,7 @@ function display($total_view_time, $channel_time_pairs): void
 {
   // 合計視聴時間を60で割って、小数点第一位までをhour表示する
   $total_view_time_hour = $total_view_time / 60;
-  echo round($total_view_time_hour, 1) . PHP_EOL;
+  echo "合計視聴時間:" . round($total_view_time_hour, 1) . PHP_EOL;
   // 各チャンネルごとに視聴時間を表示させる。
   $result = [];
   $count = [];
@@ -56,13 +56,16 @@ function display($total_view_time, $channel_time_pairs): void
       $count[$number] = 1;
     }
   }
+  ksort($result);
   foreach ($result as $key => $value) {
-    echo $key . " " . $value . " " . $count[$key] . PHP_EOL;
+    echo $key . "ch " . $value . "分 " . $count[$key] . "回視聴" . PHP_EOL;
   }
 }
 
 // メインルーチン
 // 入力データを変数へ格納する
+echo "視聴チャンネル（1~12）およびそのチャンネルの視聴時間(分)を半角スペースで区切って入力してください。" . PHP_EOL;
+echo "入力例 1 40 2 40 4 40 1 30" . PHP_EOL;
 $inputs = trim(fgets(STDIN));
 $channel_time_pairs = channel_time_to_pairs($inputs);
 $total_view_time = calculate_total_view_time($channel_time_pairs);
