@@ -65,7 +65,7 @@ const BREAD_ITEM_PRICES =
 const MIN_BREAD_NUMBER = 1;
 const MAX_BREAD_NUMBER = 10;
 const MIN_BREAD_SALES_NUMBER = 1;
-
+const TAX = 10;
 // 入力値が商品番号、販売数量のペアになっているかを確認する処理
 function validate_pair(array $input): void
 {
@@ -117,19 +117,14 @@ function calculate_total_price(array $bread_number_sales_pairs): int
   foreach ($bread_number_sales_pairs as $item_number => $sales_number) {
     $total_price += BREAD_ITEM_PRICES[$item_number] * $sales_number;
   }
-  return $total_price;
+
+  return $total_price * (100 + TAX) / 100;
 }
 
 // 最大販売数量の商品番号を取得する処理
 function calculate_max_sales_item_number(array $bread_number_sales_pairs): array
 {
-  $max_sales_number = 0;
-  foreach ($bread_number_sales_pairs as $sales_number) {
-    if ($max_sales_number < $sales_number) {
-      $max_sales_number = $sales_number;
-    }
-  }
-  $max_item_sales_number = [];
+  $max_sales_number = max(array_values($bread_number_sales_pairs));
   $max_item_sales_number = array_keys($bread_number_sales_pairs, $max_sales_number);
   asort($max_item_sales_number);
   return $max_item_sales_number;
@@ -138,16 +133,7 @@ function calculate_max_sales_item_number(array $bread_number_sales_pairs): array
 // 最小販売数量の商品番号を取得する処理
 function calculate_min_sales_item_number(array $bread_number_sales_pairs): array
 {
-  $min_sales_number = 0;
-  foreach ($bread_number_sales_pairs as $sales_number) {
-    if ($min_sales_number === 0) {
-      $min_sales_number = $sales_number;
-    }
-    if ($min_sales_number > $sales_number) {
-      $min_sales_number = $sales_number;
-    }
-  }
-  $min_item_sales_number = [];
+  $min_sales_number = min(array_values($bread_number_sales_pairs));
   $min_item_sales_number = array_keys($bread_number_sales_pairs, $min_sales_number);
   asort($min_item_sales_number);
   return $min_item_sales_number;
