@@ -19,6 +19,8 @@
 // 2.求める配列データ
 // [1] =>20, [3] => 50, [1] => 30 ...
 
+namespace ViewingChannel;
+
 const MIN_TOTAL_VIEWING_TIME = 0;
 const MAX_TOTAL_VIEWING_TIME = 1440;
 const MIN_CHANNEL_NUMBER = 1;
