@@ -1,4 +1,5 @@
 <?php
+
 // ◯お題
 // あなたは小さなパン屋を営んでいました。一日の終りに売上の集計作業を行います。
 // 商品は10種類あり、それぞれ金額は以下の通りです（税抜）。
@@ -46,7 +47,7 @@
 // 例）$min_sales_item_number = [5,10]
 // 4.合計金額、最大販売個数の商品番号および最小販売個数の商品番号を表示
 
-
+namespace Bread;
 
 const BREAD_ITEM_PRICES =
 [
@@ -67,7 +68,7 @@ const MAX_BREAD_NUMBER = 10;
 const MIN_BREAD_SALES_NUMBER = 1;
 const TAX = 10;
 // 入力値が商品番号、販売数量のペアになっているかを確認する処理
-function validate_pair(array $input): void
+function validatePair(array $input): void
 {
   if (count($input) % 2 !== 0) {
     echo 'エラー:商品番号 半角スペース 販売個数の順に入力してください。' . PHP_EOL;
@@ -76,7 +77,7 @@ function validate_pair(array $input): void
 }
 
 // 入力値において、商品番号は1~10の整数、販売数量が1以上の整数かを確認。
-function validate_input_data(array $bread_number_sales_pairs): void
+function validateInputData(array $bread_number_sales_pairs): void
 {
   foreach ($bread_number_sales_pairs as $key => $number) {
     if (!is_int($key) || !is_int($number)) {
@@ -90,12 +91,11 @@ function validate_input_data(array $bread_number_sales_pairs): void
   }
 }
 
-// コマンドラインより値を取得し[商品番号]=>[販売数量]の配列に変換し、$bread_number_sales_pairsとして返す処理
-function input_data_to_pair(): array
+// コマンドラインより値を取得し、取得した配列を[商品番号]=>[販売数量]の配列に変換し、$bread_number_sales_pairsとして返す処理
+function inputDataToPair(array $argv): array
 {
-  $inputs = $_SERVER['argv'];
-  $input = array_slice($inputs, 1);
-  validate_pair($input);
+  $input = array_slice($argv, 1);
+  validatePair($input);
   $results = array_chunk($input, 2);
   $bread_number_sales_pairs = [];
   foreach ($results as $result) {
@@ -106,12 +106,12 @@ function input_data_to_pair(): array
       $bread_number_sales_pairs[$item_number] = (int)$sales_number;
     }
   }
-  validate_input_data($bread_number_sales_pairs);
+  validateInputData($bread_number_sales_pairs);
   return $bread_number_sales_pairs;
 }
 
 // 合計金額を取得する処理
-function calculate_total_price(array $bread_number_sales_pairs): int
+function calculateTotalPrice(array $bread_number_sales_pairs): int
 {
   $total_price = 0;
   foreach ($bread_number_sales_pairs as $item_number => $sales_number) {
@@ -122,7 +122,7 @@ function calculate_total_price(array $bread_number_sales_pairs): int
 }
 
 // 最大販売数量の商品番号を取得する処理
-function calculate_max_sales_item_number(array $bread_number_sales_pairs): array
+function calculateMaxSalesItemNumber(array $bread_number_sales_pairs): array
 {
   $max_sales_number = max(array_values($bread_number_sales_pairs));
   $max_item_sales_number = array_keys($bread_number_sales_pairs, $max_sales_number);
@@ -131,7 +131,7 @@ function calculate_max_sales_item_number(array $bread_number_sales_pairs): array
 }
 
 // 最小販売数量の商品番号を取得する処理
-function calculate_min_sales_item_number(array $bread_number_sales_pairs): array
+function calculateMinSalesItemNumber(array $bread_number_sales_pairs): array
 {
   $min_sales_number = min(array_values($bread_number_sales_pairs));
   $min_item_sales_number = array_keys($bread_number_sales_pairs, $min_sales_number);
@@ -148,7 +148,6 @@ function display(int $total_price, array $max_item_sales_numbers, array $min_ite
     echo $max_item_sales_number . ' ';
   }
   echo PHP_EOL;
-
   echo '最小販売数量の商品番号:';
   foreach ($min_item_sales_numbers as $min_item_sales_number) {
     echo $min_item_sales_number . ' ';
@@ -157,8 +156,8 @@ function display(int $total_price, array $max_item_sales_numbers, array $min_ite
 }
 
 // メインルーチン
-$bread_number_sales_pairs = input_data_to_pair();
-$total_price = calculate_total_price($bread_number_sales_pairs);
-$max_item_sales_number = calculate_max_sales_item_number($bread_number_sales_pairs);
-$min_item_sales_number = calculate_min_sales_item_number($bread_number_sales_pairs);
+$bread_number_sales_pairs = inputDataToPair([$_SERVER['argv']]);
+$total_price = calculateTotalPrice($bread_number_sales_pairs);
+$max_item_sales_number = calculateMaxSalesItemNumber($bread_number_sales_pairs);
+$min_item_sales_number = calculateMinSalesItemNumber($bread_number_sales_pairs);
 display($total_price, $max_item_sales_number, $min_item_sales_number);
