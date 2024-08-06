@@ -51,9 +51,9 @@ class BreadTest extends TestCase
 
     EOD;
     $this->expectOutputString($output);
-    $total_price = 8250;
-    $max_item_sales_number = [0 => 1];
-    $min_item_sales_number = [0 => 9];
-    display($total_price, $max_item_sales_number, $min_item_sales_number);
+    $totalPrice = 8250;
+    $maxItemSalesNumber = [0 => 1];
+    $minItemSalesNumber = [0 => 9];
+    display($totalPrice, $maxItemSalesNumber, $minItemSalesNumber);
   }
 }
