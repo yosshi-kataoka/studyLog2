@@ -49,6 +49,8 @@
 
 namespace Bread;
 
+use Exception;
+
 const BREAD_ITEM_PRICES =
 [
     1 => 100,
@@ -68,12 +70,16 @@ const MAX_BREAD_NUMBER = 10;
 const MIN_BREAD_SALES_NUMBER = 1;
 const TAX = 10;
 
+class ValidationException extends Exception
+{
+}
+
 // 入力値が商品番号、販売数量のペアになっているかを確認する処理
 function validatePair(array $input): void
 {
     if (count($input) % 2 !== 0) {
-        echo 'エラー:商品番号 半角スペース 販売個数の順に入力してください。' . PHP_EOL;
-        exit(1);
+        throw new
+            ValidationException('商品番号 半角スペース 販売個数の順に入力してください。');
     }
 }
 
@@ -82,12 +88,12 @@ function validateInputData(array $breadSalesList): void
 {
     foreach ($breadSalesList as $key => $number) {
         if (!is_int($key) || !is_int($number)) {
-            echo 'エラー:商品番号および販売個数には整数を入力してください。' . PHP_EOL;
-            exit(1);
+            throw new
+                ValidationException('商品番号および販売個数には整数を入力してください。');
         }
         if (MIN_BREAD_NUMBER > $key || MAX_BREAD_NUMBER < $key || MIN_BREAD_NUMBER > $number) {
-            echo 'エラー:商品番号に1~10以外の整数もしくは販売個数に1未満が入力されています。' . PHP_EOL;
-            exit(1);
+            throw new
+                ValidationException('商品番号に1~10以外の整数もしくは販売個数に1未満が入力されています。');
         }
     }
 }
@@ -157,8 +163,12 @@ function display(int $totalPrice, array $maxItemSalesNumbers, array $minItemSale
 }
 
 // メインルーチン
-$breadSalesList = inputDataToPair($_SERVER['argv']);
-$totalPrice = calculateTotalPrice($breadSalesList);
-$maxItemSalesNumber = calculateMaxSalesItemNumber($breadSalesList);
-$minItemSalesNumber = calculateMinSalesItemNumber($breadSalesList);
-display($totalPrice, $maxItemSalesNumber, $minItemSalesNumber);
+try {
+    $breadSalesList = inputDataToPair($_SERVER['argv']);
+    $totalPrice = calculateTotalPrice($breadSalesList);
+    $maxItemSalesNumber = calculateMaxSalesItemNumber($breadSalesList);
+    $minItemSalesNumber = calculateMinSalesItemNumber($breadSalesList);
+    display($totalPrice, $maxItemSalesNumber, $minItemSalesNumber);
+} catch (ValidationException $e) {
+    echo 'エラー発生:' . $e->getMessage() . PHP_EOL;
+}
