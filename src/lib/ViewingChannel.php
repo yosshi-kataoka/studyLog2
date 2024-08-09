@@ -21,48 +21,28 @@
 
 namespace ViewingChannel;
 
+use Exception;
+
 const MIN_TOTAL_VIEWING_TIME = 0;
 const MAX_TOTAL_VIEWING_TIME = 1440;
 const MIN_CHANNEL_NUMBER = 1;
 const MAX_CHANNEL_NUMBER = 12;
 const SPLIT_MINUTE_TO_HOUR_NUMBER = 60;
 
+class ValidationException extends Exception
+{
+}
 
 function inputDataToViewChannelAndViewTime(): array
 {
     $inputs = trim(fgets(STDIN));
     $input = explode(' ', $inputs);
     if (count($input) % 2 !== 0) {
-        echo 'エラー:視聴番号 半角スペース 視聴時間 の順に入力されていません。' . PHP_EOL;
-        echo '入力例)1 29 3 40 1 30 2 90 のように入力してください。' . PHP_EOL;
-        exit(1);
+        throw new
+            ValidationException('視聴番号 半角スペース 視聴時間 の順に入力されていません。' . PHP_EOL . '入力例)1 29 3 40 1 30 2 90 のように入力してください。');
     }
     $splitArrayToPairs = array_chunk($input, 2);
     return $splitArrayToPairs;
-}
-
-function calculateViewTimeParChannel(array $splitArrayToPairs): array
-{
-    $pairViewChannels = [];
-    $count = [];
-    $totalViewTime = 0;
-    foreach ($splitArrayToPairs as $splitArrayToPair) {
-        list($number, $viewTime) = $splitArrayToPair;
-        $error = validate($splitArrayToPair);
-        $totalViewTime += (int)$viewTime;
-        if ($error || MIN_TOTAL_VIEWING_TIME > $totalViewTime  || $totalViewTime > MAX_TOTAL_VIEWING_TIME) {
-            echo 'エラー:視聴番号が1~12以外、もしくは合計視聴時間が0~1440の範囲を超えて入力されています。' . PHP_EOL;
-            exit(1);
-        }
-        if (isset($pairViewChannels[$number])) {
-            $pairViewChannels[$number] += (int)$viewTime;
-            $count[$number]++;
-            continue;
-        }
-        $pairViewChannels[$number] = (int)$viewTime;
-        $count[$number] = 1;
-    }
-    return [$pairViewChannels, $count, $totalViewTime];
 }
 
 function validate(array $splitArrayToPair): bool
@@ -76,6 +56,30 @@ function validate(array $splitArrayToPair): bool
     }
     return $result;
 }
+function calculateViewTimeParChannel(array $splitArrayToPairs): array
+{
+    $pairViewChannels = [];
+    $count = [];
+    $totalViewTime = 0;
+    foreach ($splitArrayToPairs as $splitArrayToPair) {
+        list($number, $viewTime) = $splitArrayToPair;
+        $errorOccur = validate($splitArrayToPair);
+        $totalViewTime += (int)$viewTime;
+        if ($errorOccur || MIN_TOTAL_VIEWING_TIME > $totalViewTime  || $totalViewTime > MAX_TOTAL_VIEWING_TIME) {
+            throw new
+                ValidationException('視聴番号が1~12以外、もしくは合計視聴時間が0~1440の範囲を超えて入力されています。');
+        }
+        if (isset($pairViewChannels[$number])) {
+            $pairViewChannels[$number] += (int)$viewTime;
+            $count[$number]++;
+            continue;
+        }
+        $pairViewChannels[$number] = (int)$viewTime;
+        $count[$number] = 1;
+    }
+    return [$pairViewChannels, $count, $totalViewTime];
+}
+
 
 function calculateTotalHours(int $totalViewTime): float
 {
@@ -93,7 +97,11 @@ function display(array $pairViewChannel, array $count, float $totalViewTime): vo
     }
 }
 // メインルーチン
-$splitArrayToPairs = inputDataToViewChannelAndViewTime();
-list($pairViewChannel, $count, $totalViewTime) = calculateViewTimeParChannel($splitArrayToPairs);
-$totalViewTime = calculateTotalHours($totalViewTime);
-display($pairViewChannel, $count, $totalViewTime);
+try {
+    $splitArrayToPairs = inputDataToViewChannelAndViewTime();
+    list($pairViewChannel, $count, $totalViewTime) = calculateViewTimeParChannel($splitArrayToPairs);
+    $totalViewTime = calculateTotalHours($totalViewTime);
+    display($pairViewChannel, $count, $totalViewTime);
+} catch (ValidationException $e) {
+    echo 'エラー発生:' . $e->getMessage() . PHP_EOL;
+}
