@@ -10,6 +10,7 @@ class ViewingChannelTest extends TestCase
 {
     public function testInputDataToViewChannelAndViewTime()
     {
+
         $result = InputDataToViewChannelAndViewTime();
         $this->assertSame([['1', '20'], ['3', '30'], ['1', '30']], $result);
     }
