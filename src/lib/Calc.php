@@ -30,7 +30,9 @@ const ONION_DISCOUNT_THREE = 3;
 const ONION_DISCOUNT_THREE_PRICE = 50;
 const SET_DISCOUNT_PRICE = 20;
 const DISCOUNT_TIME_IS_HALF = 2;
-const DISCOUNT_TIME = "2100";
+const OPENING_TIME = new DateTime('0900');
+const CLOSE_TIME = new DateTime('2300');
+const DISCOUNT_TIME = new DateTime('2100');
 
 class ValidationException extends Exception
 {
@@ -38,9 +40,18 @@ class ValidationException extends Exception
 
 function sumBuyingPurchase(array $inputs): int
 {
+    foreach ($inputs as $input) {
+        if (!is_int($input)) {
+            throw new
+                ValidationException('商品番号（1から10までの整数）以外が入力されてます。');
+        }
+        if ($input < 1 || $input > 10) {
+            throw new
+                ValidationException('商品番号（1から10までの整数）以外の数字が入力されてます。');
+        }
+    }
     $totalBuyingPurchase = count($inputs);
     return $totalBuyingPurchase;
-    //
 }
 
 function validate(string $buyingTime, array $inputs, int $totalBuyingPurchase): void
@@ -49,6 +60,12 @@ function validate(string $buyingTime, array $inputs, int $totalBuyingPurchase): 
         throw new
             ValidationException('時刻が正しく入力されてないです。時刻は21:00のように入力してください');
     }
+    $buyingTime = new DateTime($buyingTime);
+    if ($buyingTime < OPENING_TIME || $buyingTime > CLOSE_TIME) {
+        throw new
+            ValidationException('時刻は9時から23時までを入力してください');
+    }
+
     foreach ($inputs as $input) {
         if (!is_int($input)) {
             throw new
@@ -150,9 +167,9 @@ function calc(string $buyingTime, array $inputs)
 
 // メインルーチン
 try {
-    $inputs = [1, 1, 1, 2, 2, 7, 10];
+    $inputs = [1, 1, 2, 2, 7, 10];
     // $inputs = [1, 1, 10, 3, 5, 7, 8, 9, 4];
-    calc('21:00', $inputs);
+    calc('21:30', $inputs);
 } catch (ValidationException $e) {
-    $e->getMessage();
+    echo 'エラー発生:' . $e->getMessage() . PHP_EOL;
 }
