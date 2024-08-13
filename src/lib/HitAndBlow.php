@@ -65,8 +65,8 @@ function judge(string $player1Inputs, string $player2Inputs): array
 
 // メインルーチン
 try {
-  $player1Inputs = "13545";
-  $player2Inputs = "14795";
+  $player1Inputs = "1354";
+  $player2Inputs = "1479";
   validate($player1Inputs, $player2Inputs);
   judge($player1Inputs, $player2Inputs);
 } catch (ValidationException $e) {
