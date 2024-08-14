@@ -71,91 +71,90 @@ const CARD_STRENGTH = [
     'Q' => 11,
     'K' => 12
 ];
+
+const HIGH_CARD = 'high card';
+const PAIR = 'pair';
+const STRAIGHT = 'straight';
+
 const STRENGTH_OF_HANDS = [
     'high card' => 1,
     'pair' => 2,
     'straight' => 3
 ];
 
+const NO_DIFFERENCE = 0;
+
 function convertToStrength(array $playerCards): array
 {
-    $playerCard = [];
-    foreach ($playerCards as $cardNumber) {
-        $playerCard[] = CARD_STRENGTH[$cardNumber];
-    }
-    return $playerCard;
+    $cardStrength = array_map(fn($playerCard) => CARD_STRENGTH[$playerCard], $playerCards);
+    return $cardStrength;
 }
 
 function isStraight(int $diff): bool
 {
-    if ($diff === 1 || $diff === 12) {
+    if ($diff === 1 || isMinMax($diff)) {
         return true;
     }
     return false;
+}
+
+function isMinMax(int $diff): bool
+{
+    return abs($diff) === max(CARD_STRENGTH) - min(CARD_STRENGTH);
 }
 
 function isPair(int $diff): bool
 {
-    if ($diff === 0) {
+    if ($diff === NO_DIFFERENCE) {
         return true;
     }
     return false;
 }
 
-function judgeTheHand(array $hand): array
+function judgeTheHand(int $cardStrength1, int $cardStrength2): array
 {
-    $playerHand = 'high card';
-    $maxHandStrength = max($hand);
-    $minHandStrength = min($hand);
-    $diff = ((int)$maxHandStrength - (int)$minHandStrength);
+    $name = HIGH_CARD;
+    $primary = max($cardStrength1, $cardStrength2);
+    $secondary = min($cardStrength1, $cardStrength2);
+    $diff = ($primary - $secondary);
     if (isStraight($diff)) {
-        $playerHand = 'straight';
-        if ($diff === 12) {
-            $maxHandStrength = $minHandStrength;
+        $name = STRAIGHT;
+        if (isMinMax($diff)) {
+            $primary = min(CARD_STRENGTH);
+            $secondary = max(CARD_STRENGTH);
         }
     }
     if (isPair($diff)) {
-        $playerHand = 'pair';
+        $name = PAIR;
     }
-    return [$playerHand, $maxHandStrength];
+    return [
+        'name' => $name,
+        'strengthHand' => STRENGTH_OF_HANDS[$name],
+        'primary' => $primary,
+        'secondary' => $secondary
+    ];
 }
 
-function decideTheWinner(array $hands): int
+function decideTheWinner(array $hands1, array $hands2): int
 {
-    $handStrength = [];
-    $cardStrength = [];
-    foreach ($hands as $hand) {
-        $handStrength[] = STRENGTH_OF_HANDS[$hand[0]];
-        $cardStrength[] = $hand[1];
+    foreach (['strengthHand', 'primary', 'secondary'] as $k) {
+        if ($hands1[$k] > $hands2[$k]) {
+            return 1;
+        }
+        if ($hands1[$k] < $hands2[$k]) {
+            return 2;
+        }
+        return 0;
     }
-    $victoryOrDefeat = ($handStrength[0] > $handStrength[1]) ? 1 : (($handStrength[0] < $handStrength[1]) ? 2 : 0);
-    if ($victoryOrDefeat === 0) {
-        $victoryOrDefeat = ($cardStrength[0] > $cardStrength[1]) ? 1 : (($cardStrength[0] < $cardStrength[1]) ? 2 : 0);
-    }
-    return $victoryOrDefeat;
 }
 
-function display(array $hands, int $victoryOrDefeat): string
+function showDown(string ...$cards): array
 {
-    $playerHands = [];
-    foreach ($hands as $hand) {
-        $playerHands[] = $hand[0];
-    }
-    return implode(',', $playerHands) . ',' . $victoryOrDefeat . PHP_EOL;
-}
-
-function showDown(string $player1Card1, string $player1Card2, string $player2Card1, string $player2Card2): void
-{
-    $cards = [$player1Card1, $player1Card2, $player2Card1, $player2Card2];
-    $playerCards = [];
-    foreach ($cards as $card) {
-        $playerCards[] = substr($card, 1);
-    }
-    $playerCardsStrength = array_chunk(convertToStrength($playerCards), 2);
-    $hands = [];
-    $hands[] = array_map(fn($playerCardStrength) => judgeTheHand($playerCardStrength), $playerCardsStrength);
-    $victoryOrDefeat = decideTheWinner($hands[0]);
-    echo display($hands[0], $victoryOrDefeat);
+    $playerCards = array_map(fn($card) => substr($card, 1, strlen($card) - 1), $cards);
+    $cardStrengths = array_chunk(convertToStrength($playerCards), 2);
+    $hands = array_map(fn($cardStrength) => judgeTheHand($cardStrength[0], $cardStrength[1]), $cardStrengths);
+    $winner = decideTheWinner($hands[0], $hands[1]);
+    return [$hands[0]['name'], $hands[1]['name'], $winner];
 }
 // メインルーチン
-showDown('CK', 'DJ', 'C10', 'H10');
+// showDown('CK', 'DA', 'C10', 'H10');
