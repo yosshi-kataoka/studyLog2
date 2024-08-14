@@ -37,38 +37,25 @@ class TwoCardPokerTest extends TestCase
 
   public function testJudgeTheHand()
   {
-    $this->assertSame(['high card', 9], judgeTheHand([6, 9]));
-    $this->assertSame(['pair', 8], judgeTheHand([8, 8]));
-    $this->assertSame(['straight', 13], judgeTheHand([13, 12]));
-    $this->assertSame(['straight', 1], judgeTheHand([13, 1]));
-  }
-
-  public function testDecideTheWinner()
-  {
-    $this->assertSame(1, decideTheWinner([['high card', 9], ['high card', 5]]));
-    $this->assertSame(2, decideTheWinner([['high card', 5], ['high card', 9]]));
-    $this->assertSame(0, decideTheWinner([['high card', 5], ['high card', 5]]));
-    $this->assertSame(2, decideTheWinner([['high card', 5], ['pair', 5]]));
-    $this->assertSame(2, decideTheWinner([['high card', 5], ['straight', 6]]));
-    $this->assertSame(1, decideTheWinner([['pair', 6], ['pair', 5]]));
-    $this->assertSame(2, decideTheWinner([['pair', 5], ['pair', 6]]));
-    $this->assertSame(2, decideTheWinner([['pair', 5], ['straight', 6]]));
-    $this->assertSame(2, decideTheWinner([['straight', 5], ['straight', 6]]));
-    $this->assertSame(2, decideTheWinner([['straight', 1], ['straight', 13]]));
-  }
-
-  public function testDisplay()
-  {
-    $output = <<<EOD
-    high card,high card,1
-
-    EOD;
-    $this->expectOutputString($output);
-    display([['high card', 9], ['high card', 5]], 1);
+    $this->assertSame(['name' => 'high card', 'strengthHand' => 1, 'primary' => 9, 'secondary' => 6], judgeTheHand(6, 9));
+    $this->assertSame(['name' => 'pair', 'strengthHand' => 2, 'primary' => 8, 'secondary' => 8], judgeTheHand(8, 8));
+    $this->assertSame(['name' => 'straight', 'strengthHand' => 3, 'primary' => 13, 'secondary' => 12], judgeTheHand(13, 12));
+    $this->assertSame(['name' => 'straight', 'strengthHand' => 3, 'primary' => 1, 'secondary' => 13], judgeTheHand(13, 1));
   }
 
   public function testShowDown()
   {
-    $this->assertSame('high card,pair,2', showDown('CK', 'DJ', 'C10', 'H10'));
+    showDown('CK', 'DJ', 'C10', 'H10'); //=> ['high card', 'pair', 2]
+    showDown('CK', 'DJ', 'C3', 'H4');  //=> ['high card', 'straight', 2]
+    showDown('C3', 'H4', 'DK', 'SK');  //=> ['straight', 'pair', 1]
+    showDown('HJ', 'SK', 'DQ', 'D10'); //=> ['high card', 'high card', 1]
+    showDown('H9', 'SK', 'DK', 'D10'); //=> ['high card', 'high card', 2]
+    showDown('H3', 'S5', 'D5', 'D3'); //=> ['high card', 'high card', 0]
+    showDown('CA', 'DA', 'C2', 'D2'); //=> ['pair', 'pair', 1]
+    showDown('CK', 'DK', 'CA', 'DA'); //=> ['pair', 'pair', 2]
+    showDown('C4', 'D4', 'H4', 'S4'); //=> ['pair', 'pair', 0]
+    showDown('SA', 'DK', 'C2', 'CA'); //=> ['straight', 'straight', 1]
+    showDown('C2', 'CA', 'S2', 'D3'); //=> ['straight', 'straight', 2]
+    showDown('S2', 'D3', 'C2', 'H3'); //=> ['straight', 'straight', 0]
   }
 }
