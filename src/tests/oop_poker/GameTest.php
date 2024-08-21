@@ -8,8 +8,8 @@ class GameTest extends TestCase
 {
   public function testStart()
   {
-    $game = new Game('田中');
+    $game = new Game('田中', '吉田');
     $result = $game->start();
-    $this->assertSame(2, count($result));
+    $this->assertSame([['H2', 'H3'], ['H2', 'H3']], $result);
   }
 }
