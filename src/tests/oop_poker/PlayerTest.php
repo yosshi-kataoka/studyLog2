@@ -10,6 +10,6 @@ class PlayerTest extends TestCase
   {
     $player = new Player('田中');
     $cards = $player->drawCards();
-    $this->assertSame(2, count($cards));
+    $this->assertSame(['H2', 'H3'], $cards);
   }
 }

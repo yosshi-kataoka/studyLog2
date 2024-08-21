@@ -4,13 +4,15 @@ require_once('Player.php');
 
 class Game
 {
-  public function __construct(private string $name) {}
+  public function __construct(private string $name1, private string $name2) {}
   public function start()
   {
     // プレイヤーを登録する
-    $player = new Player($this->name);
+    $player1 = new Player($this->name1);
+    $player2 = new Player($this->name2);
     // プレイヤーがカードを引く
-    $cards = $player->drawCards();
-    return $cards;
+    $cards1 = $player1->drawCards();
+    $cards2 = $player2->drawCards();
+    return [$cards1, $cards2];
   }
 }
