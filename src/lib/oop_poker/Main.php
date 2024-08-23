@@ -2,5 +2,5 @@
 
 require_once('Game.php');
 
-$game = new Game('田中', '吉田');
+$game = new Game('田中', 2);
 $game->start();

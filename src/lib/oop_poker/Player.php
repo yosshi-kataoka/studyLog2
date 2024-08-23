@@ -1,14 +1,14 @@
 <?php
 
+require_once('Deck.php');
+
 class Player
 {
   public function __construct(private string $name) {}
 
-  public function drawCards()
+  public function drawCards(Deck $deck, int $drawNum)
   {
-    $cards = $this->prepareCards();
-    $cards = $this->shuffleCards($cards);
-    return $this->selectCards($cards);
+    return $deck->drawCards($drawNum);
   }
 
   private function prepareCards()

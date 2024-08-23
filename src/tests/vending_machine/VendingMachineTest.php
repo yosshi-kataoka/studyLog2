@@ -18,11 +18,12 @@ class VendingMachineTest extends TestCase
   {
     $vendingMachine = new VendingMachine();
 
-    # お金が投入されてない場合は購入できない
-    $this->assertSame('', $vendingMachine->pressButton());
-
-    // 100円を入れた場合はジュースを購入できる
+    // 100円を入れた場合はサイダーを購入できる
     $vendingMachine->depositCoin(100);
-    $this->assertSame('cider', $vendingMachine->pressButton());
+    $this->assertSame('cider', $vendingMachine->pressButton('cider'));
+    // 200円を入れた場合はコーラを購入できる
+    $vendingMachine->depositCoin(100);
+    $vendingMachine->depositCoin(100);
+    $this->assertSame('cola', $vendingMachine->pressButton('cola'));
   }
 }

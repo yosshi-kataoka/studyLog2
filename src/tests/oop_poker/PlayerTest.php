@@ -8,8 +8,9 @@ class PlayerTest extends TestCase
 {
   public function testDrawCards()
   {
+    $deck = new Deck();
     $player = new Player('田中');
-    $cards = $player->drawCards();
-    $this->assertSame(['H2', 'H3'], $cards);
+    $cards = $player->drawCards($deck, 2);
+    $this->assertSame(2, count($cards));
   }
 }
