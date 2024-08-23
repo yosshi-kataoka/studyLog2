@@ -20,10 +20,12 @@ class VendingMachineTest extends TestCase
 
     // 100円を入れた場合はサイダーを購入できる
     $vendingMachine->depositCoin(100);
-    $this->assertSame('cider', $vendingMachine->pressButton('cider'));
+    $cider = new Drink('cider');
+    $this->assertSame('cider', $vendingMachine->pressButton($cider));
     // 200円を入れた場合はコーラを購入できる
+    $cola = new Drink('cola');
     $vendingMachine->depositCoin(100);
     $vendingMachine->depositCoin(100);
-    $this->assertSame('cola', $vendingMachine->pressButton('cola'));
+    $this->assertSame('cola', $vendingMachine->pressButton($cola));
   }
 }

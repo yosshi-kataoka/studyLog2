@@ -14,9 +14,8 @@ class VendingMachine
     return $this->depositCoinAmount;
   }
 
-  public function pressButton(string $drinkName): string
+  public function pressButton(Drink $drink): string
   {
-    $drink = new Drink($drinkName);
     if ($this->depositCoinAmount >= $drink->getPrice()) {
       $this->depositCoinAmount -= $drink->getPrice();
       return $drink->getName();
