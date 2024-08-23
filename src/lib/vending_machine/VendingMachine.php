@@ -1,25 +1,25 @@
 <?php
 
+require_once('Drink.php');
+
 class VendingMachine
 {
 
-  private const DRINK_PRICE = 100;
-  private int $depositCoinAmount = 0;
-
+  private $depositCoinAmount = 0;
   public function depositCoin(int $depositCoin): int
   {
     if ($depositCoin === 100) {
       $this->depositCoinAmount += $depositCoin;
-      return $this->depositCoinAmount;
     }
-    return 0;
+    return $this->depositCoinAmount;
   }
 
-  public function pressButton(): string
+  public function pressButton(string $drinkName): string
   {
-    if ($this->depositCoinAmount >= $this::DRINK_PRICE) {
-      $this->depositCoinAmount -= $this::DRINK_PRICE;
-      return 'cider';
+    $drink = new Drink($drinkName);
+    if ($this->depositCoinAmount >= $drink->getPrice()) {
+      $this->depositCoinAmount -= $drink->getPrice();
+      return $drink->getName();
     } else {
       return '';
     }
