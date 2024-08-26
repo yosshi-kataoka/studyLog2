@@ -17,4 +17,9 @@ class DrinkTest extends TestCase
     $cider = new Drink('cider');
     $this->assertSame(100, $cider->getPrice());
   }
+  public function testGetCupNumber()
+  {
+    $cider = new Drink('cider');
+    $this->assertSame(0, $cider->getCupNumber());
+  }
 }
