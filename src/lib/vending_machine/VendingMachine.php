@@ -1,11 +1,14 @@
 <?php
 
-require_once('Drink.php');
+require_once(__DIR__ . '/Item.php');
+require_once(__DIR__ . '../../../lib/vending_machine/CupDrink.php');
 
 class VendingMachine
 {
+  private const MAX_CUP_AMOUNT = 100;
+  private int $cupAmount = 0;
+  private int $depositCoinAmount = 0;
 
-  private $depositCoinAmount = 0;
   public function depositCoin(int $depositCoin): int
   {
     if ($depositCoin === 100) {
@@ -14,13 +17,26 @@ class VendingMachine
     return $this->depositCoinAmount;
   }
 
-  public function pressButton(Drink $drink): string
+  public function pressButton(Item $item): string
   {
-    if ($this->depositCoinAmount >= $drink->getPrice()) {
-      $this->depositCoinAmount -= $drink->getPrice();
-      return $drink->getName();
+    $itemPrice = $item->getPrice();
+    $cupNumber = $item->getCupNumber();
+    if ($this->depositCoinAmount >= $itemPrice && $this->cupAmount >= $cupNumber) {
+      $this->depositCoinAmount -= $itemPrice;
+      $this->cupAmount -= $cupNumber;
+      return $item->getName();
     } else {
       return '';
     }
+  }
+
+  public function addCup(int $addCupNumber): int
+  {
+    $cupNumber = $this->cupAmount += $addCupNumber;
+    if ($cupNumber > self::MAX_CUP_AMOUNT) {
+      $cupNumber = self::MAX_CUP_AMOUNT;
+    }
+    $this->cupAmount = $cupNumber;
+    return $this->cupAmount;
   }
 }
