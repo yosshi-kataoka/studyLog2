@@ -2,8 +2,10 @@
 
 namespace poker;
 
+require_once('Rule.php');
 require_once('Card.php');
 require_once('Player.php');
+require_once('HandEvaluator.php');
 
 class PokerGame
 {
@@ -11,12 +13,15 @@ class PokerGame
 
   public function start(): array
   {
-    $playerRanks = [];
+    $rule = new RuleA();
+    $playerHands = [];
     foreach ([$this->cards1, $this->cards2] as $cards) {
       $playerCard = new Card($cards);
       $player = new Player($playerCard);
-      $playerRanks[] = $player->getNumber();
+      $cardRank = $player->getNumber();
+      $handEvaluator = new HandEvaluator($rule);
+      $playerHands[] = $handEvaluator->getHand($cardRank);
     }
-    return $playerRanks;
+    return $playerHands;
   }
 }

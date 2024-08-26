@@ -4,7 +4,7 @@ namespace poker;
 
 class Card
 {
-  private const CardRanks = [
+  public const CARD_RANKS = [
     '2' => 1,
     '3' => 2,
     '4' => 3,
@@ -28,7 +28,7 @@ class Card
     $this->suit = array_map(fn($card) => mb_substr($card, 0, 1), $this->cards);
     $numbers = array_map(fn($card) => mb_substr($card, 1, strlen($card) - 1), $this->cards);
     foreach ($numbers as $number) {
-      $this->number[] = self::CardRanks[$number];
+      $this->number[] = self::CARD_RANKS[$number];
     }
   }
 
