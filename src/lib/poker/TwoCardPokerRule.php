@@ -5,16 +5,16 @@ namespace poker;
 require_once('Card.php');
 require_once('Rule.php');
 
-class RuleA implements Rule
+class TwoCardPokerRule implements Rule
 {
   private const HIGH_CARD = 'high card';
   private const PAIR = 'pair';
   private const STRAIGHT = 'straight';
 
-  public function getHand(array $card): string
+  public function getHand(Card $card): string
   {
     $hand = self::HIGH_CARD;
-    if ($this->isStraight($card)) {
+    if ($this->isStraight($this->card)) {
       $hand = self::STRAIGHT;
     }
     if ($this->isPair($card)) {

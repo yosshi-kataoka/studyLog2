@@ -2,7 +2,8 @@
 
 namespace poker;
 
-require_once('Rule.php');
+require_once('TwoCardPOkerRule.php');
+require_once('ThreeCardPOkerRule.php');
 require_once('Card.php');
 require_once('Player.php');
 require_once('HandEvaluator.php');
@@ -13,7 +14,7 @@ class PokerGame
 
   public function start(): array
   {
-    $rule = new RuleA();
+    $rule = $this->getUseCardNumber();
     $playerHands = [];
     foreach ([$this->cards1, $this->cards2] as $cards) {
       $playerCard = new Card($cards);
@@ -23,5 +24,14 @@ class PokerGame
       $playerHands[] = $handEvaluator->getHand($cardRank);
     }
     return $playerHands;
+  }
+
+  private function getUseCardNumber()
+  {
+    $rule = new TwoCardPokerRule();
+    if (count($this->cards1) === 3) {
+      $rule = new ThreeCardPokerRule();
+    }
+    return $rule;
   }
 }
