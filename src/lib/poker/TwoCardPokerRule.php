@@ -11,10 +11,10 @@ class TwoCardPokerRule implements Rule
   private const PAIR = 'pair';
   private const STRAIGHT = 'straight';
 
-  public function getHand(Card $card): string
+  public function getHand(array $card): string
   {
     $hand = self::HIGH_CARD;
-    if ($this->isStraight($this->card)) {
+    if ($this->isStraight($card)) {
       $hand = self::STRAIGHT;
     }
     if ($this->isPair($card)) {

@@ -31,7 +31,7 @@ class ThreeCardPokerRule implements Rule
 
   public function isThreeOfKind(array $card): bool
   {
-    if (count(array_count_values($card)) === 1) {
+    if (count(array_unique($card)) === 1) {
       return true;
     }
     return false;
@@ -60,7 +60,7 @@ class ThreeCardPokerRule implements Rule
 
   public function isPair(array $card): bool
   {
-    if (count(array_count_values($card)) === 2) {
+    if (count(array_unique($card)) === 2) {
       return true;
     }
     return false;
