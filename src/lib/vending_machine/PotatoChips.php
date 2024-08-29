@@ -1,8 +1,8 @@
 <?php
 
-require_once('Snack.php');
+require_once('Item.php');
 
-class PotatoChips extends Snack
+class PotatoChips extends Item
 {
   private const PRICES =
   [
