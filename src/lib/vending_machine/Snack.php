@@ -2,11 +2,11 @@
 
 require_once('Item.php');
 
-class PotatoChips extends Item
+class Snack extends Item
 {
   private const PRICES =
   [
-    'potatoChips' => 150
+    'potato chips' => 150
   ];
 
   public function __construct(string $name)
