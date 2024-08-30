@@ -10,7 +10,7 @@ class ThreeCardPokerRule implements Rule
   private const HIGH_CARD = 'high card';
   private const PAIR = 'pair';
   private const STRAIGHT = 'straight';
-  private const THREE_OF_KIND = 'three of a kind';
+  private const THREE_CARD = 'three card';
 
   public function getHand(array $card): string
   {
@@ -18,7 +18,7 @@ class ThreeCardPokerRule implements Rule
     rsort($card);
 
     if ($this->isThreeOfKind($card)) {
-      $hand = self::THREE_OF_KIND;
+      $hand = self::THREE_CARD;
     }
     if ($this->isStraight($card)) {
       $hand = self::STRAIGHT;

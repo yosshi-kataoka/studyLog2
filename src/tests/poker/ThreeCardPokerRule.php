@@ -17,6 +17,6 @@ class ThreeCardPokerRuleTest extends TestCase
     $this->assertSame('straight', $rule->getHand([2, 1, 3]));
     $this->assertSame('straight', $rule->getHand([13, 1, 2]));
     $this->assertSame('straight', $rule->getHand([13, 12, 11]));
-    $this->assertSame('three of a kind', $rule->getHand([1, 1, 1]));
+    $this->assertSame('three card', $rule->getHand([1, 1, 1]));
   }
 }
