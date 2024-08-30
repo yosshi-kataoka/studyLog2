@@ -86,10 +86,10 @@ class FiveCardPokerRule implements Rule
   // 配列の要素が連続した整数もしくは5-4-3-2-Aかどうかを判定
   public function isContinuous(array $card): bool
   {
-    if (range($card[0], $card[4], 1) ===  $card) {
+    if (range($card[0], $card[0] + count($card) - 1) ===  $card) {
       return true;
     }
-    if (range($card[0], $card[3], 1) === array_slice($card, 0, 4) && max($card) === max(Card::CARD_RANKS)) {
+    if (range($card[0], $card[0] + count($card) - 2) === array_slice($card, 0, 4) && max($card) === max(Card::CARD_RANKS)) {
       return true;
     }
     return false;
@@ -120,7 +120,7 @@ class FiveCardPokerRule implements Rule
 
   public function isOnePair(array $card): bool
   {
-    if (count(array_unique($card)) === self::ELEMENT_NUMBER_IS_FOUR && $this->hasPair($card)) {
+    if (count(array_unique($card)) === self::ELEMENT_NUMBER_IS_FOUR) {
       return true;
     }
     return false;
