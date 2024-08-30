@@ -2,8 +2,9 @@
 
 namespace poker;
 
-require_once('TwoCardPOkerRule.php');
-require_once('ThreeCardPOkerRule.php');
+require_once('TwoCardPokerRule.php');
+require_once('ThreeCardPokerRule.php');
+require_once('FiveCardPokerRule.php');
 require_once('Card.php');
 require_once('Player.php');
 require_once('HandEvaluator.php');
@@ -29,6 +30,9 @@ class PokerGame
   private function getUseCardNumber()
   {
     $rule = new TwoCardPokerRule();
+    if (count($this->cards1) === 5) {
+      $rule = new FiveCardPokerRule();
+    }
     if (count($this->cards1) === 3) {
       $rule = new ThreeCardPokerRule();
     }
