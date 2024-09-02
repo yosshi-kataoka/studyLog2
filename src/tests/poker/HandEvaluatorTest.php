@@ -1,8 +1,12 @@
 <?php
 
-namespace poker;
+namespace Poker\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Poker\HandEvaluator;
+use Poker\TwoCardPokerRule;
+use Poker\ThreeCardPokerRule;
+use Poker\FiveCardPokerRule;
 
 require_once(__DIR__ . '../../../lib/poker/HandEvaluator.php');
 require_once(__DIR__ . '../../../lib/poker/Rule.php');

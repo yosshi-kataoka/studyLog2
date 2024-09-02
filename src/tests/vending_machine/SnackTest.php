@@ -1,10 +1,13 @@
 <?php
 
+namespace VendingMachine\Tests;
+
 use PHPUnit\Framework\TestCase;
+use VendingMachine\Snack;
 
 require_once(__DIR__ . '../../../lib/vending_machine/Snack.php');
 
-class PotatoChipsTest extends TestCase
+class SnackTest extends TestCase
 {
   public function testGetName()
   {

@@ -1,5 +1,7 @@
 <?php
 
+namespace VendingMachine;
+
 abstract class Item
 {
   abstract public function getPrice();

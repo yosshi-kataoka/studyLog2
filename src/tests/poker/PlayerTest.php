@@ -1,8 +1,10 @@
 <?php
 
-namespace poker;
+namespace Poker\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Poker\Player;
+use Poker\Card;
 
 require_once(__DIR__ . '../../../lib/poker/Player.php');
 

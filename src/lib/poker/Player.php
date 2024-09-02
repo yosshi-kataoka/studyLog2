@@ -1,6 +1,6 @@
 <?php
 
-namespace poker;
+namespace Poker;
 
 require_once('Card.php');
 class Player

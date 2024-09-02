@@ -1,5 +1,7 @@
 <?php
 
+namespace OopPoker;
+
 require_once('Rule.php');
 
 class RuleC implements Rule

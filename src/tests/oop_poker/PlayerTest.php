@@ -1,6 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use OopPoker\Deck;
+use OopPoker\Player;
 
 require_once(__DIR__ . '../../../lib/oop_poker/Player.php');
 

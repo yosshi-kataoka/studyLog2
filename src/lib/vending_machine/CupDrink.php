@@ -1,5 +1,7 @@
 <?php
 
+namespace VendingMachine;
+
 require_once(__DIR__ . '/Item.php');
 
 class CupDrink extends Item

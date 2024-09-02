@@ -1,6 +1,10 @@
 <?php
 
+namespace OopPoker\Tests;
+
 use PHPUnit\Framework\TestCase;
+use OopPoker\RuleA;
+use OopPoker\Card;
 
 require_once(__DIR__ . '../../../lib/oop_poker/RuleA.php');
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace poker;
+namespace Poker;
 
 require_once('TwoCardPokerRule.php');
 require_once('ThreeCardPokerRule.php');

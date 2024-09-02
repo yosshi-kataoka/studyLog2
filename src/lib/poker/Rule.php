@@ -1,6 +1,6 @@
 <?php
 
-namespace poker;
+namespace Poker;
 
 interface Rule
 {
