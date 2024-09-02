@@ -1,8 +1,9 @@
 <?php
 
-namespace poker;
+namespace Poker\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Poker\TwoCardPokerRule;
 
 require_once(__DIR__ . '../../../lib/poker/TwoCardPokerRule.php');
 

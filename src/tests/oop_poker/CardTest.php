@@ -1,6 +1,9 @@
 <?php
 
+namespace OopPoker\Tests;
+
 use PHPUnit\Framework\TestCase;
+use OopPoker\Card;
 
 require_once(__DIR__ . '../../../lib/oop_poker/Card.php');
 

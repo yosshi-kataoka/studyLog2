@@ -1,5 +1,7 @@
 <?php
 
+namespace VendingMachine;
+
 require_once('Item.php');
 
 class Snack extends Item

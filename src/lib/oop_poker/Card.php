@@ -1,5 +1,7 @@
 <?php
 
+namespace OopPoker;
+
 class Card
 {
   public function __construct(private string $suit, private int $number) {}

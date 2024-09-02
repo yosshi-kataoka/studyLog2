@@ -1,5 +1,7 @@
 <?php
 
+namespace OopPoker;
+
 require_once('Card.php');
 
 class Deck
