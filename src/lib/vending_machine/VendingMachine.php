@@ -19,13 +19,21 @@ class VendingMachine
     return $this->depositCoinAmount;
   }
 
+  public function purchaseConditions(int $itemPrice, int $cupNumber, Item $item): bool
+  {
+    if ($this->depositCoinAmount >= $itemPrice && $this->cupAmount >= $cupNumber && $item->getStockNumber() > 0) {
+      return true;
+    } else return false;
+  }
+
   public function pressButton(Item $item): string
   {
     $itemPrice = $item->getPrice();
     $cupNumber = $item->getCupNumber();
-    if ($this->depositCoinAmount >= $itemPrice && $this->cupAmount >= $cupNumber) {
+    if ($this->purchaseConditions($itemPrice, $cupNumber, $item)) {
       $this->depositCoinAmount -= $itemPrice;
       $this->cupAmount -= $cupNumber;
+      $item->reduceStockNumber();
       return $item->getName();
     } else {
       return '';
@@ -40,5 +48,17 @@ class VendingMachine
     }
     $this->cupAmount = $cupNumber;
     return $this->cupAmount;
+  }
+
+  public function depositItem(Item $item, int $depositNumber): int
+  {
+    return $item->depositItem($depositNumber);
+  }
+
+  public function receiveChange(): int
+  {
+    $change =  $this->depositCoinAmount;
+    $this->depositCoinAmount = 0;
+    return $change;
   }
 }
