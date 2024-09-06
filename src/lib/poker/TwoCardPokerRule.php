@@ -10,17 +10,27 @@ class TwoCardPokerRule implements Rule
   private const HIGH_CARD = 'high card';
   private const PAIR = 'pair';
   private const STRAIGHT = 'straight';
+  private const HandRanks =
+  [
+    'high card' => 1,
+    'pair' => 2,
+    'straight' => 3,
+  ];
 
-  public function getHand(array $card): string
+  public function getHand(array $card): array
   {
-    $hand = self::HIGH_CARD;
+    rsort($card);
+    $hands['name'] = self::HIGH_CARD;
+    $hands['primary'] = $card[0];
+    $hands['secondary'] = $card[1];
     if ($this->isStraight($card)) {
-      $hand = self::STRAIGHT;
+      $hands['name'] = self::STRAIGHT;
     }
     if ($this->isPair($card)) {
-      $hand = self::PAIR;
+      $hands['name'] = self::PAIR;
     }
-    return $hand;
+    $hands['handRank'] = self::HandRanks[$hands['name']];
+    return $hands;
   }
 
   public function isMinMax(array $card): bool
@@ -44,5 +54,18 @@ class TwoCardPokerRule implements Rule
       return true;
     }
     return false;
+  }
+
+  public function judgeTheWinner(array $playerHands): int
+  {
+    foreach (['handRank', 'primary', 'secondary'] as $k) {
+      if ($playerHands[0][$k] > $playerHands[1][$k]) {
+        return 1;
+      } elseif ($playerHands[0][$k] < $playerHands[1][$k]) {
+        return 2;
+      } else {
+        return 0;
+      }
+    }
   }
 }

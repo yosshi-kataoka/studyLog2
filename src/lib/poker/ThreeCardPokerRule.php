@@ -12,7 +12,7 @@ class ThreeCardPokerRule implements Rule
   private const STRAIGHT = 'straight';
   private const THREE_CARD = 'three card';
 
-  public function getHand(array $card): string
+  public function getHand(array $card): array
   {
     $hand = self::HIGH_CARD;
     rsort($card);
@@ -64,5 +64,13 @@ class ThreeCardPokerRule implements Rule
       return true;
     }
     return false;
+  }
+
+  public function judgeTheWinner(array $playerHands): int
+  {
+    var_dump($playerHands);
+    // foreach ([$playerHands[0], $playerHands[1], $playerHands[2]] as $k) {
+    return 1;
+    // }
   }
 }
