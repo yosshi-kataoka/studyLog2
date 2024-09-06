@@ -24,7 +24,8 @@ class PokerGame
       $handEvaluator = new HandEvaluator($rule);
       $playerHands[] = $handEvaluator->getHand($cardRank);
     }
-    return $playerHands;
+    $winner = $handEvaluator->judgeTheWinner($playerHands);
+    return [$playerHands[0]['name'], $playerHands[1]['name'], $winner];
   }
 
   private function getUseCardNumber()

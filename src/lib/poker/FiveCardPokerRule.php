@@ -20,7 +20,7 @@ class FiveCardPokerRule implements Rule
   private const ELEMENT_NUMBER_IS_THREE = 3;
   private const ELEMENT_NUMBER_IS_FOUR = 4;
 
-  public function getHand(array $card): string
+  public function getHand(array $card): array
   {
     $hand = self::HIGH_CARD;
     sort($card);
@@ -124,5 +124,13 @@ class FiveCardPokerRule implements Rule
       return true;
     }
     return false;
+  }
+  // judgeTheWinnerメソッドは仮実装
+  public function judgeTheWinner(array $playerHands): int
+  {
+    var_dump($playerHands);
+    // foreach ([$playerHands[0], $playerHands[1], $playerHands[2]] as $k) {
+    return 1;
+    // }
   }
 }
