@@ -10,7 +10,7 @@ class TwoCardPokerRule implements Rule
   private const HIGH_CARD = 'high card';
   private const PAIR = 'pair';
   private const STRAIGHT = 'straight';
-  private const HandRanks =
+  private const HAND_RANKS =
   [
     'high card' => 1,
     'pair' => 2,
@@ -29,7 +29,7 @@ class TwoCardPokerRule implements Rule
     if ($this->isPair($card)) {
       $hands['name'] = self::PAIR;
     }
-    $hands['handRank'] = self::HandRanks[$hands['name']];
+    $hands['handRank'] = self::HAND_RANKS[$hands['name']];
     return $hands;
   }
 
@@ -63,9 +63,8 @@ class TwoCardPokerRule implements Rule
         return 1;
       } elseif ($playerHands[0][$k] < $playerHands[1][$k]) {
         return 2;
-      } else {
-        return 0;
       }
     }
+    return 0;
   }
 }
