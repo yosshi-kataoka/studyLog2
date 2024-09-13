@@ -19,30 +19,104 @@ class FiveCardPokerRule implements Rule
   private const IDENTICAL_NUMBER_IS_TWO = 2;
   private const ELEMENT_NUMBER_IS_THREE = 3;
   private const ELEMENT_NUMBER_IS_FOUR = 4;
-
+  private const HAND_RANKS =
+  [
+    'high card' => 1,
+    'one pair' => 2,
+    'two pair' => 3,
+    'straight' => 4,
+    'three of a kind' => 5,
+    'full house' => 6,
+    'four of a kind' => 7,
+  ];
   public function getHand(array $card): array
   {
-    $hand = self::HIGH_CARD;
-    sort($card);
+    rsort($card);
+    $hands['name'] = self::HIGH_CARD;
+    $hands['primary'] = $card[0];
+    $hands['secondary'] = $card[1];
+    $hands['tertiary'] = $card[2];
+    $hands['quaternary'] = $card[3];
+    $hands['quinary'] = $card[4];
+    $hands['name'] = self::HIGH_CARD;
     if ($this->isFourCard($card)) {
-      $hand = self::FOUR_CARD;
+      $hands['name'] = self::FOUR_CARD;
+      if ($hands['primary'] !== $hands['secondary']) {
+        $hands['primary'] = min($card);
+        $hands['secondary'] = max($card);
+      } elseif ($hands['primary'] === $hands['secondary']) {
+        $hands['secondary'] = min($card);
+      }
     }
     if ($this->isFullHouse($card)) {
-      $hand = self::FULL_HOUSE;
+      $hands['name'] = self::FULL_HOUSE;
+      $hands['secondary'] = $card[4];
     }
     if ($this->isThreeOfKind($card)) {
-      $hand = self::THREE_OF_KIND;
+      $hands['name'] = self::THREE_OF_KIND;
+      if ($card[0] === $card[1] && $card[0] === $card[2]) {
+        $hands['secondary'] = $card[3];
+        $hands['tertiary'] = $card[4];
+      }
+      if ($card[1] === $card[2] && $card[1] === $card[3]) {
+        $hands['primary'] = $card[1];
+        $hands['secondary'] = $card[0];
+        $hands['tertiary'] = $card[4];
+      }
+      if ($card[2] === $card[3] && $card[2] === $card[4]) {
+        $hands['primary'] = $card[2];
+        $hands['secondary'] = $card[0];
+        $hands['tertiary'] = $card[1];
+      }
     }
     if ($this->isStraight($card)) {
-      $hand = self::STRAIGHT;
+      $hands['name'] = self::STRAIGHT;
+      if ($hands['primary'] === max(Card::CARD_RANKS) && $hands['quinary'] === min(Card::CARD_RANKS)) {
+        $hands['primary'] = $hands['secondary'];
+        $hands['secondary'] = max(Card::CARD_RANKS);
+      }
     }
     if ($this->isTwoPair($card)) {
-      $hand = self::TWO_PAIR;
+      $hands['name'] = self::TWO_PAIR;
+      if ($card[0] === $card[1]) {
+        if ($card[2] === $card[3]) {
+          $hands['secondary'] = $card[2];
+          $hands['tertiary'] = $card[4];
+        } elseif ($card[3] === $card[4]) {
+          $hands['secondary'] = $card[3];
+          $hands['tertiary'] = $card[2];
+        }
+      } elseif ($card[0] !== $card[1]) {
+        $hands['primary'] = $card[1];
+        $hands['secondary'] = $card[3];
+        $hands['tertiary'] = $card[0];
+      }
     }
     if ($this->isOnePair($card)) {
-      $hand = self::ONE_PAIR;
+      $hands['name'] = self::ONE_PAIR;
+      if ($card[0] === $card[1]) {
+        $hands['secondary'] = $card[2];
+        $hands['tertiary'] = $card[3];
+        $hands['quaternary'] = $card[4];
+      } elseif ($card[1] === $card[2]) {
+        $hands['primary'] = $card[1];
+        $hands['secondary'] = $card[0];
+        $hands['tertiary'] = $card[3];
+        $hands['quaternary'] = $card[4];
+      } elseif ($card[2] === $card[3]) {
+        $hands['primary'] = $card[2];
+        $hands['secondary'] = $card[0];
+        $hands['tertiary'] = $card[1];
+        $hands['quaternary'] = $card[4];
+      } elseif ($card[3] === $card[4]) {
+        $hands['primary'] = $card[3];
+        $hands['secondary'] = $card[0];
+        $hands['tertiary'] = $card[1];
+        $hands['quaternary'] = $card[2];
+      }
     }
-    return $hand;
+    $hands['handRank'] = self::HAND_RANKS[$hands['name']];
+    return $hands;
   }
 
   // カードの配列の要素数が2個かどうかを判定
@@ -86,6 +160,7 @@ class FiveCardPokerRule implements Rule
   // 配列の要素が連続した整数もしくは5-4-3-2-Aかどうかを判定
   public function isContinuous(array $card): bool
   {
+    sort($card);
     if (range($card[0], $card[0] + count($card) - 1) ===  $card) {
       return true;
     }
@@ -128,9 +203,13 @@ class FiveCardPokerRule implements Rule
   // judgeTheWinnerメソッドは仮実装
   public function judgeTheWinner(array $playerHands): int
   {
-    var_dump($playerHands);
-    // foreach ([$playerHands[0], $playerHands[1], $playerHands[2]] as $k) {
-    return 1;
-    // }
+    foreach (['handRank', 'primary', 'secondary', 'tertiary', 'quaternary', 'quinary',] as $k) {
+      if ($playerHands[0][$k] > $playerHands[1][$k]) {
+        return 1;
+      } elseif ($playerHands[0][$k] < $playerHands[1][$k]) {
+        return 2;
+      }
+    }
+    return 0;
   }
 }
