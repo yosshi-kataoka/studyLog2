@@ -17,7 +17,7 @@ class PlayerTest extends TestCase
   {
     $deck = new Deck();
     $player = new Player();
-    $this->assertSame([['suit' => 'H', 'number' => 'A']], $player->drawCard($deck));
+    $this->assertSame([['suit' => 'ハート', 'number' => 'A']], $player->drawCard($deck));
   }
 
   public function testGetTotalCardsNumber()
@@ -29,12 +29,4 @@ class PlayerTest extends TestCase
     $player->drawCard($deck);
     $this->assertSame(3, $player->getTotalCardsNumber());
   }
-
-  // public function testGetSuit()
-  // {
-  //   $deck = new Deck();
-  //   $card = new Card();
-  //   $player = new Player();
-  //   $player->drawCard($card, $deck);
-  // }
 }

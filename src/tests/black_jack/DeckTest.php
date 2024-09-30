@@ -15,7 +15,7 @@ class DeckTest extends TestCase
   {
     $deck = new Deck();
     $result = $deck->drawCard();
-    $this->assertSame(['suit' => 'H', 'number' => 'A'], $result);
+    $this->assertSame(['suit' => 'ハート', 'number' => 'A'], $result);
   }
   public function testGetRank()
   {
