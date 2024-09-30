@@ -4,5 +4,5 @@ namespace BlackJack;
 
 abstract class User
 {
-  abstract function drawCard();
+  abstract function drawCard(Deck $deck);
 }
