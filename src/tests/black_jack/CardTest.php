@@ -11,7 +11,17 @@ class CardTest extends TestCase
 {
   public function testDrawCard()
   {
-    $card = new Card('ハート', 2);
-    $this->assertSame(1, $card->start());
+    $card = new Card();
+    $output = [['H', 'A']];
+    $this->assertSame(['H', 'A'], $card->drawCard($output));
+  }
+  public function testGetRank()
+  {
+    $card = new Card();
+    $this->assertSame(1, $card->getRank('A'));
+    $this->assertSame(5, $card->getRank(5));
+    $this->assertSame(10, $card->getRank('J'));
+    $this->assertSame(10, $card->getRank('Q'));
+    $this->assertSame(10, $card->getRank('K'));
   }
 }
