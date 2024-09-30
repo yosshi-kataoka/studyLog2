@@ -8,11 +8,11 @@ require_once('Deck.php');
 use BlackJack\User;
 use BlackJack\Deck;
 
-class Player extends User
+class Dealer extends User
 {
   public function __construct()
   {
-    $this->name = 'あなた';
+    $this->name = 'ディーラー';
   }
 
   public function drawCard(Deck $deck): array
@@ -28,6 +28,7 @@ class Player extends User
     return $this->totalCardsNumber;
   }
 
+  //仮実装 一枚目は開示、二枚目は伏せる処理を今後実装
   public function getCardMessage(): void
   {
     foreach ($this->hands as $hand) {
