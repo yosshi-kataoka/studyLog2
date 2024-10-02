@@ -28,11 +28,20 @@ class Dealer extends User
     return $this->totalCardsNumber;
   }
 
-  //仮実装 一枚目は開示、二枚目は伏せる処理を今後実装
-  public function getCardMessage(): void
+  //一枚目のカードは表示し、二枚目は表示しない処理
+  public function firstGetCardMessage(): void
   {
-    foreach ($this->hands as $hand) {
-      echo $this->name . 'の引いたカードは' . $hand['suit'] . 'の' . $hand['number'] . 'です.' . PHP_EOL;
-    }
+    echo $this->name . 'の引いたカードは' . $this->hands[0]['suit'] . 'の' . $this->hands[0]['number'] . 'です.' . PHP_EOL;
+    echo $this->name . 'の引いた2枚目のカードはわかりません。' . PHP_EOL;
+  }
+  // 2枚目のカードを表示する処理
+  public function displaySecondCardMessage(): void
+  {
+    echo 'ディーラーの引いた2枚目のカードは' . $this->hands[1]['suit'] . 'の' . $this->hands[1]['number'] . 'でした。' . PHP_EOL;
+  }
+  // 最後に配られたカードを表示する処理
+  public function lastGetCardMessage(): void
+  {
+    echo $this->name . 'の引いたカードは' . end($this->hands['suit']) . 'の' . end($this->hands['number']) . 'です.' . PHP_EOL;
   }
 }
