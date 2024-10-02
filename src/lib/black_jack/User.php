@@ -9,5 +9,6 @@ abstract class User
   protected string $name = '';
   abstract function drawCard(Deck $deck): array;
   abstract function getTotalCardsNumber(): int;
-  abstract function getCardMessage(): void;
+  abstract function firstGetCardMessage(): void;
+  abstract function lastGetCardMessage(): void;
 }
