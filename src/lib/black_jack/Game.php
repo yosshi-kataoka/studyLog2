@@ -29,7 +29,9 @@ class Game
     $dealer->firstGetCardMessage();
     $player->selectCardAddOrNot($deck);
     $dealer->displaySecondCardMessage();
-    $dealer->selectCardAddOrNot($deck);
+    if ($player->getTotalCardsNumber() < $deck->getBustNumber()) {
+      $dealer->selectCardAddOrNot($deck);
+    }
     $deck->judgeTheWinner($player, $dealer);
 
     return 1;
