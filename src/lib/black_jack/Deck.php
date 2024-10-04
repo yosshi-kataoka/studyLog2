@@ -44,4 +44,13 @@ class Deck
   {
     return $this->card->getRank($drawnCard);
   }
+
+  public function getBustNumber(): int
+  {
+    return $this->card->getBustNumber();
+  }
+  public function judgeTheWinner(Player $player, Dealer $dealer)
+  {
+    $this->card->judgeTheWinner($player, $dealer);
+  }
 }
