@@ -9,10 +9,12 @@ require_once(__DIR__ . '../../../lib/black_jack/Deck.php');
 use BlackJack\Player;
 use BlackJack\Dealer;
 use BlackJack\Deck;
+use Exception;
 
 class Game
 {
   const FIRST_DRAW_CARD_NUMBER = 2;
+
   public function start()
   {
     $this->startMessage();
@@ -25,6 +27,10 @@ class Game
     }
     $player->firstGetCardMessage();
     $dealer->firstGetCardMessage();
+    $player->selectCardAddOrNot($deck);
+    $dealer->displaySecondCardMessage();
+    $dealer->selectCardAddOrNot($deck);
+    $deck->judgeTheWinner($player, $dealer);
 
     return 1;
   }
@@ -41,7 +47,4 @@ class Game
   {
     echo 'ブラックジャックを開始します。' . PHP_EOL;
   }
-
-  // カードを追加するかしないかを選択する処理を今後実装
-  private function selectCardAddOrNot() {}
 }

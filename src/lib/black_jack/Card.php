@@ -22,6 +22,7 @@ class Card
     'Q' => 10,
     'K' => 10,
   ];
+  const BUST_NUMBER = 22;
 
   // private string $suit;
   // private int|string $number;
@@ -35,6 +36,19 @@ class Card
   {
     return self::CARD_RANKS[$drawnCard];
   }
+
+  public function getBustNumber(): int
+  {
+    return self::BUST_NUMBER;
+  }
+
+  public function judgeTheWinner(Player $player, Dealer $dealer)
+  {
+    $player->displayTotalCardsNumber();
+    $dealer->displayTotalCardsNumber();
+  }
+
+
 
   // public function getSuit(): string
   // {

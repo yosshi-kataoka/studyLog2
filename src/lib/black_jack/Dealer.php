@@ -10,6 +10,8 @@ use BlackJack\Deck;
 
 class Dealer extends User
 {
+
+  const KEEP_DRAWING_NUMBER = 17;
   public function __construct()
   {
     $this->name = 'ディーラー';
@@ -23,9 +25,23 @@ class Dealer extends User
     return $this->hands;
   }
 
+  public function selectCardAddOrNot(Deck $deck): void
+  {
+    while ($this->totalCardsNumber < self::KEEP_DRAWING_NUMBER) {
+      echo $this->getName() . 'の現在の得点は' . $this->getTotalCardsNumber() . 'です。' . PHP_EOL;
+      $this->drawCard($deck);
+      $this->lastGetCardMessage();
+    }
+  }
+
+
   public function getTotalCardsNumber(): int
   {
     return $this->totalCardsNumber;
+  }
+  public function getName(): string
+  {
+    return $this->name;
   }
 
   //一枚目のカードは表示し、二枚目は表示しない処理
@@ -42,6 +58,11 @@ class Dealer extends User
   // 最後に配られたカードを表示する処理
   public function lastGetCardMessage(): void
   {
-    echo $this->name . 'の引いたカードは' . end($this->hands['suit']) . 'の' . end($this->hands['number']) . 'です.' . PHP_EOL;
+    echo $this->name . 'の引いたカードは' . end($this->hands)['suit'] . 'の' . end($this->hands)['number'] . 'です.' . PHP_EOL;
+  }
+
+  public function displayTotalCardsNumber(): void
+  {
+    echo $this->getName() . 'の得点は' . $this->getTotalCardsNumber() . 'です。' . PHP_EOL;
   }
 }
