@@ -49,8 +49,15 @@ class Deck
   {
     return $this->card->getBustNumber();
   }
-  public function judgeTheWinner(Player $player, Dealer $dealer)
+
+  public function judgeTheWinner(Player $player, Dealer $dealer): string
   {
-    $this->card->judgeTheWinner($player, $dealer);
+    return $this->card->judgeTheWinner($player, $dealer);
+  }
+
+  //　テストコードでのみ使用
+  public function getCards(): array
+  {
+    return $this->cards[0];
   }
 }

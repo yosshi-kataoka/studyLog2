@@ -32,10 +32,10 @@ class Game
     if ($player->getTotalCardsNumber() < $deck->getBustNumber()) {
       $dealer->selectCardAddOrNot($deck);
     }
-    $deck->judgeTheWinner($player, $dealer);
-
-    return 1;
+    $result = $deck->judgeTheWinner($player, $dealer);
+    return $result;
   }
+
   // 処理で使用するPlayer、Dealer，Deckクラスをそれぞれインスタンス化する処理
   private function setupInstances()
   {

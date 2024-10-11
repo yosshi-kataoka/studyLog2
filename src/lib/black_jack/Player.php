@@ -75,17 +75,29 @@ class Player extends User
   public function firstGetCardMessage(): void
   {
     foreach ($this->hands as $hand) {
-      echo $this->name . 'の引いたカードは' . $hand['suit'] . 'の' . $hand['number'] . 'です.' . PHP_EOL;
+      echo $this->name . 'の引いたカードは' . $hand['suit'] . 'の' . $hand['number'] . 'です。' . PHP_EOL;
     }
   }
   // 最後に配られたカードを表示する処理
   public function lastGetCardMessage(): void
   {
-    echo $this->name . 'の引いたカードは' . end($this->hands)['suit'] . 'の' . end($this->hands)['number'] . 'です.' . PHP_EOL;
+    echo $this->name . 'の引いたカードは' . end($this->hands)['suit'] . 'の' . end($this->hands)['number'] . 'です。' . PHP_EOL;
   }
 
-  public function displayTotalCardsNumber(): void
+  public function displayTotalCardsNumber(): int
   {
     echo $this->getName() . 'の得点は' . $this->getTotalCardsNumber() . 'です。' . PHP_EOL;
+    return $this->getTotalCardsNumber();
+  }
+
+  //　テストコードのみに使用するメソッド
+  public function setTotalCardsNumber(int $number): void
+  {
+    $this->totalCardsNumber = $number;
+  }
+  //　テストコードのみに使用するメソッド
+  public function setHand(string $suit, int $number): void
+  {
+    $this->hands[] =  ['suit' => $suit, 'number'  => $number];
   }
 }

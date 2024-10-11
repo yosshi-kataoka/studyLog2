@@ -47,7 +47,7 @@ class Dealer extends User
   //一枚目のカードは表示し、二枚目は表示しない処理
   public function firstGetCardMessage(): void
   {
-    echo $this->name . 'の引いたカードは' . $this->hands[0]['suit'] . 'の' . $this->hands[0]['number'] . 'です.' . PHP_EOL;
+    echo $this->name . 'の引いたカードは' . $this->hands[0]['suit'] . 'の' . $this->hands[0]['number'] . 'です。' . PHP_EOL;
     echo $this->name . 'の引いた2枚目のカードはわかりません。' . PHP_EOL;
   }
   // 2枚目のカードを表示する処理
@@ -58,11 +58,24 @@ class Dealer extends User
   // 最後に配られたカードを表示する処理
   public function lastGetCardMessage(): void
   {
-    echo $this->name . 'の引いたカードは' . end($this->hands)['suit'] . 'の' . end($this->hands)['number'] . 'です.' . PHP_EOL;
+    echo $this->name . 'の引いたカードは' . end($this->hands)['suit'] . 'の' . end($this->hands)['number'] . 'です。' . PHP_EOL;
   }
 
-  public function displayTotalCardsNumber(): void
+  public function displayTotalCardsNumber(): int
   {
     echo $this->getName() . 'の得点は' . $this->getTotalCardsNumber() . 'です。' . PHP_EOL;
+    return $this->getTotalCardsNumber();
+  }
+
+  //　テストコードのみに使用するメソッド
+  public function setTotalCardsNumber(int $number): void
+  {
+    $this->totalCardsNumber = $number;
+  }
+
+  //　テストコードのみに使用するメソッド
+  public function setHand(string $suit, int $number): void
+  {
+    $this->hands[] =  ['suit' => $suit, 'number'  => $number];
   }
 }
