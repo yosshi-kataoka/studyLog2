@@ -12,6 +12,9 @@ class GameTest extends TestCase
   public function testStart()
   {
     $game = new Game();
-    $this->assertSame(1, $game->start());
+    $result = trim($game->start());
+    var_dump($result);
+    $expectingOutputString = ['あなたの負けです。', 'あなたの勝ちです!', '引き分けです。'];
+    $this->assertContains($result, $expectingOutputString, 'いずれもふくまれておりません。');
   }
 }

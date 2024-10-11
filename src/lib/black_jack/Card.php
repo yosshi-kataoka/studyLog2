@@ -42,10 +42,47 @@ class Card
     return self::BUST_NUMBER;
   }
 
-  public function judgeTheWinner(Player $player, Dealer $dealer)
+  public function judgeTheWinner(Player $player, Dealer $dealer): string
   {
-    $player->displayTotalCardsNumber();
-    $dealer->displayTotalCardsNumber();
+    $playerTotalCardsNumber = $player->displayTotalCardsNumber();
+    $dealerTotalCardsNumber = $dealer->displayTotalCardsNumber();
+    if ($this->isPush($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
+      return '引き分けです。' . PHP_EOL;
+    } elseif ($this->isWin($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
+      return  $player->getName() . 'の勝ちです!' . PHP_EOL;
+    } elseif ($this->isLoss($playerTotalCardsNumber, $dealerTotalCardsNumber))
+      return $player->getName() . 'の負けです。' . PHP_EOL;
+  }
+
+  private function isPush(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
+  {
+    if ($playerTotalCardsNumber >= self::BUST_NUMBER && $dealerTotalCardsNumber >= self::BUST_NUMBER) {
+      return true;
+    } elseif ($playerTotalCardsNumber === $dealerTotalCardsNumber) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private function isWin(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
+  {
+    if ($playerTotalCardsNumber < self::BUST_NUMBER) {
+      if ($playerTotalCardsNumber > $dealerTotalCardsNumber || $dealerTotalCardsNumber >= self::BUST_NUMBER) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private function isLoss(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
+  {
+    if ($dealerTotalCardsNumber < self::BUST_NUMBER) {
+      if ($playerTotalCardsNumber < $dealerTotalCardsNumber || $playerTotalCardsNumber >= self::BUST_NUMBER) {
+        return true;
+      }
+    }
+    return false;
   }
 
 

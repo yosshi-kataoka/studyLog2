@@ -13,5 +13,7 @@ abstract class User
   abstract function getName(): string;
   abstract function firstGetCardMessage(): void;
   abstract function lastGetCardMessage(): void;
-  abstract function displayTotalCardsNumber(): void;
+  abstract function displayTotalCardsNumber(): int;
+  abstract function setTotalCardsNumber(int $number): void;
+  abstract function setHand(string $suit, int $number): void;
 }

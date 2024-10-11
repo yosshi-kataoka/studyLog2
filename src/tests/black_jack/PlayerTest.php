@@ -29,4 +29,33 @@ class PlayerTest extends TestCase
     $player->drawCard($deck);
     $this->assertSame(3, $player->getTotalCardsNumber());
   }
+  public function testGetName()
+  {
+    $player = new Player();
+    $this->assertSame('あなた', $player->getName());
+  }
+  public function testFirstGetCardMessage()
+  {
+    $player = new Player();
+    $player->setHand('ハート', 9);
+    ob_start();
+    $player->firstGetCardMessage();
+    $output = ob_get_clean();
+    $this->assertSame('あなたの引いたカードはハートの9です。' . PHP_EOL, $output);
+    $player->setHand('クラブ', 10);
+    ob_start();
+    $player->firstGetCardMessage();
+    $output = ob_get_clean();
+    $this->assertSame('あなたの引いたカードはハートの9です。' . PHP_EOL  . 'あなたの引いたカードはクラブの10です。' . PHP_EOL, $output);
+  }
+  public function testLastGetCardMessage()
+  {
+    $player = new Player();
+    $player->setHand('ハート', 9);
+    $player->setHand('クラブ', 10);
+    ob_start();
+    $player->lastGetCardMessage();
+    $output = ob_get_clean();
+    $this->assertSame('あなたの引いたカードはクラブの10です。' . PHP_EOL, $output);
+  }
 }
