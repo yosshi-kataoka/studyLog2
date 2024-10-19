@@ -19,16 +19,21 @@ class Player extends User
   public function drawCard(Deck $deck): array
   {
     $drawnCard = $deck->drawCard();
-    $this->totalCardsNumber += $deck->getRank($drawnCard['number']);
     $this->hands[] = $drawnCard;
+    $this->calculateTotalCardNumber($this->hands, $deck);
     return $this->hands;
+  }
+
+  protected function calculateTotalCardNumber(array $hands, Deck $deck): void
+  {
+    list($this->hands, $this->totalCardsNumber) = $deck->calculateTotalCardNumber($hands);
   }
 
   // カードを追加するかしないかを選択する処理
   public function selectCardAddOrNot(Deck $deck): void
   {
-    $drawMore = true;
-    while ($drawMore) {
+    while (true) {
+      // カードの合計を計算する処理を実装
       echo $this->getName() . 'の現在の得点は' . $this->getTotalCardsNumber() . 'です。カードを引きますか？(Y/N)' . PHP_EOL;
       try {
         $inputValue = trim(fgets(STDIN));
@@ -36,10 +41,10 @@ class Player extends User
           $this->drawCard($deck);
           $this->lastGetCardMessage();
           if ($this->getTotalCardsNumber() >= $deck->getBustNumber()) {
-            $drawMore = false;
+            break;
           }
         } elseif (!$this->inputValidation($inputValue)) {
-          $drawMore = false;
+          break;
         }
       } catch (Exception $e) {
         echo $e->getMessage();
@@ -49,7 +54,7 @@ class Player extends User
 
   // 入力内容に応じて真偽値を返す処理
   // 入力値に例外があった場合の例外処理も実装
-  private function inputValidation(string $inputValue): bool
+  protected function inputValidation(string $inputValue): bool
   {
     $inputData = strtolower($inputValue);
     if ($inputData === 'y' || $inputData === 'yes') {
@@ -96,8 +101,8 @@ class Player extends User
     $this->totalCardsNumber = $number;
   }
   //　テストコードのみに使用するメソッド
-  public function setHand(string $suit, int $number): void
+  public function setHand(string $suit, int $number, int $cardRank): void
   {
-    $this->hands[] =  ['suit' => $suit, 'number'  => $number];
+    $this->hands[] =  ['suit' => $suit, 'number'  => $number, 'cardRank' => $cardRank];
   }
 }

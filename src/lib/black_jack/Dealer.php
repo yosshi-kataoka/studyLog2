@@ -20,9 +20,14 @@ class Dealer extends User
   public function drawCard(Deck $deck): array
   {
     $drawnCard = $deck->drawCard();
-    $this->totalCardsNumber += $deck->getRank($drawnCard['number']);
     $this->hands[] = $drawnCard;
+    $this->calculateTotalCardNumber($this->hands, $deck);
     return $this->hands;
+  }
+
+  protected function calculateTotalCardNumber(array $hands, Deck $deck): void
+  {
+    list($this->hands, $this->totalCardsNumber) = $deck->calculateTotalCardNumber($hands);
   }
 
   public function selectCardAddOrNot(Deck $deck): void
@@ -33,7 +38,6 @@ class Dealer extends User
       $this->lastGetCardMessage();
     }
   }
-
 
   public function getTotalCardsNumber(): int
   {
@@ -74,8 +78,8 @@ class Dealer extends User
   }
 
   //　テストコードのみに使用するメソッド
-  public function setHand(string $suit, int $number): void
+  public function setHand(string $suit, int $number, int $cardRank): void
   {
-    $this->hands[] =  ['suit' => $suit, 'number'  => $number];
+    $this->hands[] =  ['suit' => $suit, 'number'  => $number, 'cardRank' => $cardRank];
   }
 }
