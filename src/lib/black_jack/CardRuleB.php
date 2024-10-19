@@ -4,11 +4,11 @@ namespace BlackJack;
 
 require_once(__DIR__ . '../../../lib/black_jack/Deck.php');
 
-class Card
+class CardRuleB extends CardRule
 {
   const CARD_RANKS =
   [
-    'A' => 1,
+    'A' => 11,
     2 => 2,
     3 => 3,
     4 => 4,
@@ -22,19 +22,30 @@ class Card
     'Q' => 10,
     'K' => 10,
   ];
-  const BUST_NUMBER = 22;
 
-  // private string $suit;
-  // private int|string $number;
+  const BUST_NUMBER = 22;
 
   public function drawCard(array $cards): array
   {
+    $cards[0]['cardRank'] = $this->getRank($cards[0]['number']);
     return $cards[0];
   }
 
   public function getRank(int|string $drawnCard): int
   {
     return self::CARD_RANKS[$drawnCard];
+  }
+
+  public function calculateTotalCardNumber(array $hands): array
+  {
+    $sum = array_sum(array_column($hands, 'cardRank'));
+    foreach ($hands as &$hand) {
+      if ($hand['cardRank'] === 11 && $sum >= 22) {
+        $hand['cardRank'] = 1;
+        $sum -= 10;
+      }
+    }
+    return [$hands, $sum];
   }
 
   public function getBustNumber(): int
@@ -54,7 +65,7 @@ class Card
       return $player->getName() . 'の負けです。' . PHP_EOL;
   }
 
-  private function isPush(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
+  protected function isPush(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
   {
     if ($playerTotalCardsNumber >= self::BUST_NUMBER && $dealerTotalCardsNumber >= self::BUST_NUMBER) {
       return true;
@@ -65,7 +76,7 @@ class Card
     }
   }
 
-  private function isWin(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
+  protected function isWin(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
   {
     if ($playerTotalCardsNumber < self::BUST_NUMBER) {
       if ($playerTotalCardsNumber > $dealerTotalCardsNumber || $dealerTotalCardsNumber >= self::BUST_NUMBER) {
@@ -75,7 +86,7 @@ class Card
     return false;
   }
 
-  private function isLoss(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
+  protected function isLoss(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool
   {
     if ($dealerTotalCardsNumber < self::BUST_NUMBER) {
       if ($playerTotalCardsNumber < $dealerTotalCardsNumber || $playerTotalCardsNumber >= self::BUST_NUMBER) {
@@ -84,16 +95,4 @@ class Card
     }
     return false;
   }
-
-
-
-  // public function getSuit(): string
-  // {
-  //   return $this->suit;
-  // }
-
-  // public function getNumber(): int|string
-  // {
-  //   return $this->number;
-  // }
 }
