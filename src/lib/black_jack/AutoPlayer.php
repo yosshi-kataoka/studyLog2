@@ -9,11 +9,12 @@ use BlackJack\User;
 use BlackJack\Deck;
 use \Exception;
 
-class Player extends User
+class AutoPlayer extends User
 {
-  public function __construct()
+  const KEEP_DRAWING_NUMBER = 17;
+  public function __construct(string $name)
   {
-    $this->name = 'あなた';
+    $this->name = $name;
   }
 
   public function drawCard(Deck $deck): array
@@ -32,23 +33,10 @@ class Player extends User
   // カードを追加するかしないかを選択する処理
   public function selectHitOrStand(Deck $deck): void
   {
-    while (true) {
-      // カードの合計を計算する処理を実装
-      echo $this->getName() . 'の現在の得点は' . $this->getTotalCardsNumber() . 'です。カードを引きますか？(Y/N)' . PHP_EOL;
-      try {
-        $inputValue = trim(fgets(STDIN));
-        if ($this->inputValidation($inputValue)) {
-          $this->drawCard($deck);
-          $this->lastGetCardMessage();
-          if ($this->getTotalCardsNumber() >= $deck->getBustNumber()) {
-            break;
-          }
-        } elseif (!$this->inputValidation($inputValue)) {
-          break;
-        }
-      } catch (Exception $e) {
-        echo $e->getMessage();
-      }
+    while ($this->totalCardsNumber < self::KEEP_DRAWING_NUMBER) {
+      echo $this->getName() . 'の現在の得点は' . $this->getTotalCardsNumber() . 'です。' . PHP_EOL;
+      $this->drawCard($deck);
+      $this->lastGetCardMessage();
     }
   }
 

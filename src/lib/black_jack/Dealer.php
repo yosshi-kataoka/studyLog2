@@ -30,7 +30,7 @@ class Dealer extends User
     list($this->hands, $this->totalCardsNumber) = $deck->calculateTotalCardNumber($hands);
   }
 
-  public function selectCardAddOrNot(Deck $deck): void
+  public function selectHitOrStand(Deck $deck): void
   {
     while ($this->totalCardsNumber < self::KEEP_DRAWING_NUMBER) {
       echo $this->getName() . 'の現在の得点は' . $this->getTotalCardsNumber() . 'です。' . PHP_EOL;

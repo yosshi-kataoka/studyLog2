@@ -53,16 +53,21 @@ class CardRuleB extends CardRule
     return self::BUST_NUMBER;
   }
 
-  public function judgeTheWinner(Player $player, Dealer $dealer): string
+  public function judgeTheWinner(array $players, Dealer $dealer): array
   {
-    $playerTotalCardsNumber = $player->displayTotalCardsNumber();
+    $result = [];
     $dealerTotalCardsNumber = $dealer->displayTotalCardsNumber();
-    if ($this->isPush($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
-      return '引き分けです。' . PHP_EOL;
-    } elseif ($this->isWin($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
-      return  $player->getName() . 'の勝ちです!' . PHP_EOL;
-    } elseif ($this->isLoss($playerTotalCardsNumber, $dealerTotalCardsNumber))
-      return $player->getName() . 'の負けです。' . PHP_EOL;
+    foreach ($players as $player) {
+      $playerTotalCardsNumber = $player->displayTotalCardsNumber();
+      if ($this->isPush($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
+        $result[] =  $player->getName() . 'は引き分けです。' . PHP_EOL;
+      } elseif ($this->isWin($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
+        $result[] = $player->getName() . 'の勝ちです!' . PHP_EOL;
+      } elseif ($this->isLoss($playerTotalCardsNumber, $dealerTotalCardsNumber)) {
+        $result[] = $player->getName() . 'の負けです。' . PHP_EOL;
+      }
+    }
+    return $result;
   }
 
   protected function isPush(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool

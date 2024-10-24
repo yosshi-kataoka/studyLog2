@@ -10,7 +10,7 @@ abstract class CardRule
   abstract public function getRank(int|string $drawnCard): int;
   abstract public function calculateTotalCardNumber(array $hands): array;
   abstract public function getBustNumber(): int;
-  abstract public function judgeTheWinner(Player $player, Dealer $dealer): string;
+  abstract public function judgeTheWinner(array $players, Dealer $dealer): array;
   abstract protected function isPush(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool;
   abstract protected function isWin(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool;
   abstract protected function isLoss(int $playerTotalCardsNumber, int $dealerTotalCardsNumber): bool;

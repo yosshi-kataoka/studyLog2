@@ -4,12 +4,14 @@ namespace BlackJack\Tests;
 
 require_once(__DIR__ . '../../../lib/black_jack/CardRuleB.php');
 require_once(__DIR__ . '../../../lib/black_jack/Player.php');
+require_once(__DIR__ . '../../../lib/black_jack/AutoPlayer.php');
 require_once(__DIR__ . '../../../lib/black_jack/Dealer.php');
 require_once(__DIR__ . '../../../lib/black_jack/Deck.php');
 
 use PHPUnit\Framework\TestCase;
 use BlackJack\CardRuleB;
 use BlackJack\Player;
+use BlackJack\AutoPlayer;
 use BlackJack\Dealer;
 use BlackJack\Deck;
 
@@ -106,30 +108,36 @@ class CardRuleBTest extends TestCase
 
   public function testJudgeTheWinner()
   {
-    $player = new Player();
+    $players = [];
+    $players[] = new Player();
+    $players[] = new AutoPlayer('cpu1');
+    $players[] = new AutoPlayer('cpu2');
     $dealer = new dealer();
     $cardRule = new CardRuleB();
     $deck = new Deck($cardRule);
     //　勝敗結果が'引き分けです。'となる場合
-    $player->setTotalCardsNumber(21);
+    array_map(fn($player) => $player->setTotalCardsNumber(21), $players);
     $dealer->setTotalCardsNumber(21);
-    $this->assertSame('引き分けです。' . PHP_EOL, $deck->judgeTheWinner($player, $dealer));
-    $player->setTotalCardsNumber(22);
+    $expectedOutputString = ['あなたは引き分けです。' . PHP_EOL, 'cpu1は引き分けです。' . PHP_EOL, 'cpu2は引き分けです。' . PHP_EOL];
+    $this->assertSame($expectedOutputString, $deck->judgeTheWinner($players, $dealer));
+    array_map(fn($player) => $player->setTotalCardsNumber(22), $players);
     $dealer->setTotalCardsNumber(27);
-    $this->assertSame('引き分けです。' . PHP_EOL, $deck->judgeTheWinner($player, $dealer));
+    $this->assertSame($expectedOutputString, $deck->judgeTheWinner($players, $dealer));
     //　勝敗結果が'あなたの勝ちです!'となる場合
-    $player->setTotalCardsNumber(21);
+    array_map(fn($player) => $player->setTotalCardsNumber(21), $players);
+    $expectedOutputString = ['あなたの勝ちです!' . PHP_EOL, 'cpu1の勝ちです!' . PHP_EOL, 'cpu2の勝ちです!' . PHP_EOL];
     $dealer->setTotalCardsNumber(18);
-    $this->assertSame('あなたの勝ちです!' . PHP_EOL, $deck->judgeTheWinner($player, $dealer));
-    $player->setTotalCardsNumber(21);
+    $this->assertSame($expectedOutputString, $deck->judgeTheWinner($players, $dealer));
+    array_map(fn($player) => $player->setTotalCardsNumber(21), $players);
     $dealer->setTotalCardsNumber(23);
-    $this->assertSame('あなたの勝ちです!' . PHP_EOL, $deck->judgeTheWinner($player, $dealer));
+    $this->assertSame($expectedOutputString, $deck->judgeTheWinner($players, $dealer));
     //　勝敗結果が'あなたの負けです。'となる場合
-    $player->setTotalCardsNumber(22);
+    array_map(fn($player) => $player->setTotalCardsNumber(22), $players);
     $dealer->setTotalCardsNumber(21);
-    $this->assertSame('あなたの負けです。' . PHP_EOL, $deck->judgeTheWinner($player, $dealer));
-    $player->setTotalCardsNumber(16);
+    $expectedOutputString = ['あなたの負けです。' . PHP_EOL, 'cpu1の負けです。' . PHP_EOL, 'cpu2の負けです。' . PHP_EOL];
+    $this->assertSame($expectedOutputString, $deck->judgeTheWinner($players, $dealer));
+    array_map(fn($player) => $player->setTotalCardsNumber(16), $players);
     $dealer->setTotalCardsNumber(21);
-    $this->assertSame('あなたの負けです。' . PHP_EOL, $deck->judgeTheWinner($player, $dealer));
+    $this->assertSame($expectedOutputString, $deck->judgeTheWinner($players, $dealer));
   }
 }
