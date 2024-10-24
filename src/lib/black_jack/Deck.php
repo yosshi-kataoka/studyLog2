@@ -56,7 +56,7 @@ class Deck
     return $this->cardRule->getBustNumber();
   }
 
-  public function judgeTheWinner(Player $player, Dealer $dealer): string
+  public function judgeTheWinner(array $player, Dealer $dealer): array
   {
     return $this->cardRule->judgeTheWinner($player, $dealer);
   }

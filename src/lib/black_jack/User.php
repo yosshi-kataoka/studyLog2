@@ -10,7 +10,7 @@ abstract class User
 
   abstract public function drawCard(Deck $deck): array;
   abstract protected function calculateTotalCardNumber(array $hands, Deck $deck): void;
-  abstract public function selectCardAddOrNot(Deck $deck): void;
+  abstract public function selectHitOrStand(Deck $deck): void;
   abstract public function getTotalCardsNumber(): int;
   abstract public function getName(): string;
   abstract public function firstGetCardMessage(): void;
